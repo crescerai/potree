@@ -378,9 +378,9 @@ export class PointCloudMaterial extends THREE.RawShaderMaterial {
 			if (classification[i]) {
 				color = classification[i].color;
 				visible = classification[i].visible;
-			} else if (classification[i % 32]) {
-				color = classification[i % 32].color;
-				visible = classification[i % 32].visible;
+			// } else if (classification[i % 32]) {
+			// 	color = classification[i % 32].color;
+			// 	visible = classification[i % 32].visible;
 			} else if(classification.DEFAULT) {
 				color = classification.DEFAULT.color;
 				visible = classification.DEFAULT.visible;
