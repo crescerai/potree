@@ -254,7 +254,9 @@ export class PointCloudMaterial extends THREE.RawShaderMaterial {
 
 		if(this.activeAttributeName){
 			let attributeName = this.activeAttributeName.replace(/[^a-zA-Z0-9]/g, '_');
-
+			if (attributeName.includes('class')) {
+				defines.push('#define class_type_attribute');
+			}
 			defines.push(`#define color_type_${attributeName}`);
 		}
 		

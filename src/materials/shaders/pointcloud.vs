@@ -600,6 +600,14 @@ vec3 getExtra(){
 	return color;
 }
 
+vec4 getClassificationLikeExtraAttribute(){
+	vec2 uv = vec2(aExtra / 255.0, 0.5);
+	vec4 classColor = texture2D(classificationLUT, uv);
+	
+	return classColor;
+}
+
+
 vec3 getColor(){
 	vec3 color;
 	
@@ -652,8 +660,13 @@ vec3 getColor(){
 		color = getCompositeColor();
 	#elif defined color_type_matcap
 		color = getMatcap();
-	#else 
-		color = getExtra();
+	#else
+		#ifdef class_type_attribute
+			vec4 cl = getClassificationLikeExtraAttribute();
+			color = cl.rgb;
+		#else
+			color = getExtra();
+		#endif
 	#endif
 	
 	if (backfaceCulling && applyBackfaceCulling()) {
