@@ -163,6 +163,7 @@ export class PointCloudMaterial extends THREE.RawShaderMaterial {
 			uFilterReturnNumberRange:		{ type: "fv", value: [0, 7]},
 			uFilterNumberOfReturnsRange:	{ type: "fv", value: [0, 7]},
 			uFilterGPSTimeClipRange:		{ type: "fv", value: [0, 7]},
+			uFilterExtraAttributeRange:		{ type: "fv", value: [-Infinity, Infinity]},
 			uFilterPointSourceIDClipRange:		{ type: "fv", value: [0, 65535]},
 			matcapTextureUniform: 	{ type: "t", value: this.matcapTexture },
 			backfaceCulling: { type: "b", value: false },
@@ -170,6 +171,7 @@ export class PointCloudMaterial extends THREE.RawShaderMaterial {
 
 		this.classification = ClassificationScheme.DEFAULT;
 		this.resetClassificationTypeAttributeVisibility();
+		this.resetFilterExtraAttributesRange();
 
 		this.defaultAttributeValues.normal = [0, 0, 0];
 		this.defaultAttributeValues.classification = [0, 0, 0];
@@ -383,6 +385,15 @@ export class PointCloudMaterial extends THREE.RawShaderMaterial {
 		const num = Number(str);
 		return Number.isInteger(num);
 	}
+
+	resetFilterExtraAttributesRange(){
+		this.uniforms.uFilterExtraAttributeRange.value = [-Infinity, Infinity];
+	}
+
+	setFilterExtraAttributesRange(range_start, range_end){
+		this.uniforms.uFilterExtraAttributeRange.value = [range_start, range_end];
+	}
+
 	resetClassificationTypeAttributeVisibility(){
 		let valuesChanged = false;
 		const width = 256;
@@ -433,7 +444,6 @@ export class PointCloudMaterial extends THREE.RawShaderMaterial {
                 target: this,
             });
         }
-		console.log(this.classificationTypeTexture);
 	}
 	
 	updateClassificationTypeAttributeVisibility(key, value){
@@ -445,7 +455,6 @@ export class PointCloudMaterial extends THREE.RawShaderMaterial {
 			data[4*255+3] = a;
         }
 		this.classificationTypeTexture.needsUpdate = true;
-		console.log(this.classificationTypeTexture);
 	}
 
 	recomputeClassification () {

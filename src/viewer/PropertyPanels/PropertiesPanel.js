@@ -546,6 +546,7 @@ export class PropertiesPanel{
 								let [a, b] = ui.values;
 
 								material.setRange(attribute.name, [a, b]);
+								material.setFilterExtraAttributesRange(a,b);
 							}
 						});
 					}
@@ -577,6 +578,7 @@ export class PropertiesPanel{
 				blockClassificationContainer.css("display", "none");
 				if(selectedValue){
 					material.resetClassificationTypeAttributeVisibility();
+					material.resetFilterExtraAttributesRange();
 				}
 				if (selectedValue === 'composite') {
 					blockWeights.css('display', 'block');

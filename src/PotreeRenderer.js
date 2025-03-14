@@ -920,12 +920,18 @@ export class Renderer {
 				let uFilterReturnNumberRange = material.uniforms.uFilterReturnNumberRange.value;
 				let uFilterNumberOfReturnsRange = material.uniforms.uFilterNumberOfReturnsRange.value;
 				let uFilterPointSourceIDClipRange = material.uniforms.uFilterPointSourceIDClipRange.value;
+				let uFilterExtraAttributeRange =
+                    material.uniforms.uFilterExtraAttributeRange.value;
 				
 				
 				
 				shader.setUniform2f("uFilterReturnNumberRange", uFilterReturnNumberRange);
 				shader.setUniform2f("uFilterNumberOfReturnsRange", uFilterNumberOfReturnsRange);
 				shader.setUniform2f("uFilterPointSourceIDClipRange", uFilterPointSourceIDClipRange);
+				shader.setUniform2f(
+                    "uFilterExtraAttributeRange",
+                    uFilterExtraAttributeRange
+                );
 			}
 
 			let webglBuffer = null;
@@ -981,10 +987,7 @@ export class Renderer {
 					const attExtra = octree.pcoGeometry.pointAttributes.attributes
 						.find(a => a.name === attName);
 
-					let range = material.getRange(attName);
-					if(!range){
-						range = attExtra.range;
-					}
+					let range = attExtra.range;
 
 					if(!range){
 						range = [0, 1];

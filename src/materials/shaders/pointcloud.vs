@@ -81,6 +81,7 @@ uniform vec2 elevationRange;
 uniform vec2 intensityRange;
 
 uniform vec2 uFilterReturnNumberRange;
+uniform vec2 uFilterExtraAttributeRange;
 uniform vec2 uFilterNumberOfReturnsRange;
 uniform vec2 uFilterPointSourceIDClipRange;
 uniform vec2 uFilterGPSTimeClipRange;
@@ -784,6 +785,15 @@ void doClipping(){
 		}
 		if(cl.a==0.0){
 			gl_Position = vec4(100.0, 100.0, 100.0, 0.0);
+			return;
+		}
+	}
+	#else
+	{
+		vec2 range = uFilterExtraAttributeRange;
+		if(aExtra < range.x || aExtra > range.y){
+			gl_Position = vec4(100.0, 100.0, 100.0, 0.0);
+			
 			return;
 		}
 	}
