@@ -987,21 +987,17 @@ export class Renderer {
 					const attExtra = octree.pcoGeometry.pointAttributes.attributes
 						.find(a => a.name === attName);
 
-					let range = attExtra.range;
+					let range = attExtra.initialRange;
 
 					if(!range){
 						range = [0, 1];
 					}
 
-					let initialRange = attExtra.initialRange;
+					let initialRange = range;
 					let initialRangeSize = initialRange[1] - initialRange[0];
 
-					let globalRange = range;
-					let globalRangeSize = globalRange[1] - globalRange[0];
-
-					let scale = initialRangeSize / globalRangeSize;
-					let offset = -(globalRange[0] - initialRange[0]) / initialRangeSize;
-
+					let scale = 1 / initialRangeSize;
+					let offset = -initialRange[0];
 					scale = Number.isNaN(scale) ? 1 : scale;
 					offset = Number.isNaN(offset) ? 0 : offset;
 
