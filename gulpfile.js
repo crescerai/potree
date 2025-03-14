@@ -187,15 +187,15 @@ gulp.task("pack", async function(){
 gulp.task('watch', gulp.parallel("build", "pack", "webserver", async function() {
 
 	let watchlist = [
-		'src/**/*.js',
-		'src/**/**/*.js',
-		'src/**/*.css',
-		'src/**/*.html',
+		// 'src/**/*.js',
+		// 'src/**/**/*.js',
+		// 'src/**/*.css',
+		// 'src/**/*.html',
 		'src/**/*.vs',
 		'src/**/*.fs',
-		'resources/**/*',
-		'examples//**/*.json',
-		'!resources/icons/index.html',
+		// 'resources/**/*',
+		// 'examples//**/*.json',
+		// '!resources/icons/index.html',
 	];
 
 	watch(watchlist, gulp.series("build", "pack"));

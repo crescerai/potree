@@ -80,6 +80,79 @@ export class PropertiesPanel{
 
 		let material = pointcloud.material;
 
+		const populateClassificationLikeAttribute = () => {
+			let elClassificationList = $("#classificationLikeList");
+
+			let addClassificationItem = (code, name) => {
+				const classification = this.viewer.classifications[code];
+				const inputID = 'chkClassificationLike_' + code;
+				const colorPickerID = 'colorPickerClassificationLike_' + code;
+
+				const checked = "checked";
+
+				let element = $(`
+					<li>
+						<label style="whitespace: nowrap; display: flex">
+							<input id="${inputID}" type="checkbox" ${checked}/>
+							<span style="flex-grow: 1">${name}</span>
+							<input id="${colorPickerID}" style="zoom: 0.5" disabled />
+						</label>
+					</li>
+				`);
+
+				const elInput = element.find('input');
+				const elColorPicker = element.find(`#${colorPickerID}`);
+
+				elInput.click(event => {
+					console.log('click', code, event.target.checked);
+					material.updateClassificationTypeAttributeVisibility(code, event.target.checked);
+				});
+
+				let defaultColor = classification.color.map(c => c * 255).join(", ");
+				defaultColor = `rgb(${defaultColor})`;
+
+				elColorPicker.spectrum({
+					// flat: true,
+					color: defaultColor,
+					showInput: true,
+					preferredFormat: 'rgb',
+					cancelText: '',
+					chooseText: 'Apply',
+					disabled: true // Disable the color picker
+				});
+
+				elClassificationList.append(element);
+			};
+			const addToggleAllButton = () => {
+                // toggle all button
+                const element = $(`
+					<li>
+						<label style="whitespace: nowrap">
+							<input id="toggleClassificationLikeFilters" type="checkbox" checked/>
+							<span>show/hide all</span>
+						</label>
+					</li>
+				`);
+
+                let elInput = element.find("input");
+
+                elInput.click((event) => {
+					console.log('Toggle clicked');
+                });
+
+                elClassificationList.append(element);
+            };
+
+			elClassificationList.empty();
+			// addToggleAllButton();
+			for (let classID in this.viewer.classifications) {
+                addClassificationItem(
+                    classID,
+                    this.viewer.classifications[classID].name
+                );
+            }
+		}
+
 		let panel = $(`
 			<div class="scene_content selectable">
 				<ul class="pv-menu-list">
@@ -148,7 +221,9 @@ export class PropertiesPanel{
 					<li>Brightness: <span id="lblRGBBrightness"></span> <div id="sldRGBBrightness"></div>	</li>
 					<li>Contrast: <span id="lblRGBContrast"></span> <div id="sldRGBContrast"></div>	</li>
 				</div>
-
+				<div id="materials.classification_like_container">
+					<ul id="classificationLikeList" class="pv-menu-list"></ul>
+				</div>
 				<div id="materials.extra_container">
 					<div class="divider">
 						<span>Extra Attribute</span>
@@ -481,6 +556,7 @@ export class PropertiesPanel{
 				let blockElevation = $('#materials\\.elevation_container');
 				let blockRGB = $('#materials\\.rgb_container');
 				let blockExtra = $('#materials\\.extra_container');
+				let blockClassificationContainer = $('#materials\\.classification_like_container');
 				let blockColor = $('#materials\\.color_container');
 				let blockIntensity = $('#materials\\.intensity_container');
 				let blockIndex = $('#materials\\.index_container');
@@ -498,7 +574,10 @@ export class PropertiesPanel{
 				blockTransition.css('display', 'none');
 				blockMatcap.css('display', 'none');
 				blockGps.css('display', 'none');
-
+				blockClassificationContainer.css("display", "none");
+				if(selectedValue){
+					material.resetClassificationTypeAttributeVisibility();
+				}
 				if (selectedValue === 'composite') {
 					blockWeights.css('display', 'block');
 					blockElevation.css('display', 'block');
@@ -532,7 +611,12 @@ export class PropertiesPanel{
 				} else if(["source id", "point source id"].includes(selectedValue)){
 					
 				} else{
-					blockExtra.css('display', 'block');
+					if(selectedValue.includes("class")){
+						populateClassificationLikeAttribute();
+						blockClassificationContainer.css("display", "block");
+					}else{
+						blockExtra.css('display', 'block');
+					}
 				}
 			};
 

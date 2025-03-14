@@ -111,6 +111,7 @@ uniform vec3 uShadowColor;
 uniform sampler2D visibleNodes;
 uniform sampler2D gradient;
 uniform sampler2D classificationLUT;
+uniform sampler2D classificationTypeLUT;
 
 #if defined(color_type_matcap)
 uniform sampler2D matcapTextureUniform;
@@ -607,6 +608,13 @@ vec4 getClassificationLikeExtraAttribute(){
 	return classColor;
 }
 
+vec4 getClassificationLikeFilterColor(float var){
+	vec2 uv = vec2(var / 255.0, 0.5);
+	vec4 classColor = texture2D(classificationTypeLUT, uv);
+	
+	return classColor;
+}
+
 
 vec3 getColor(){
 	vec3 color;
@@ -767,6 +775,19 @@ void doClipping(){
 			return;
 		}
 	}
+
+	#if defined(class_type_attribute)
+	{
+		vec4 cl = getClassificationLikeFilterColor(aExtra);
+		if(cl.r>0.0){
+			cl = getClassificationLikeFilterColor(255.0);
+		}
+		if(cl.a==0.0){
+			gl_Position = vec4(100.0, 100.0, 100.0, 0.0);
+			return;
+		}
+	}
+	#endif
 
 	#if defined(clip_return_number_enabled)
 	{ // return number filter

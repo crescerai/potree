@@ -1369,6 +1369,19 @@ export class Renderer {
 			gl.bindTexture(matcapTexture.target, matcapTexture.id);
 			currentTextureBindingPoint++;
 
+			let classificationTypeTexture = this.textures.get(
+                material.classificationTypeTexture
+            );
+            shader.setUniform1i(
+                "classificationTypeLUT",
+                currentTextureBindingPoint
+            );
+            gl.activeTexture(gl.TEXTURE0 + currentTextureBindingPoint);
+            gl.bindTexture(
+                classificationTypeTexture.target,
+                classificationTypeTexture.id
+            );
+            currentTextureBindingPoint++;
 
 			if (material.snapEnabled === true) {
 
