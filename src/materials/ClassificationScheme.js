@@ -50,6 +50,11 @@ export const ClassificationScheme = {
             name: "Bridge",
             color: [0.95, 0.85, 0.2, 1.0],
         },
+        18: {
+            visible: true,
+            name: "High Point Noise",
+            color: [0.95, 0.1, 0.1, 1.0],
+        },
         22: { visible: true, name: "SeaBed", color: [0.35, 0.24, 0.15, 1.0] },
         29: {
             visible: true,

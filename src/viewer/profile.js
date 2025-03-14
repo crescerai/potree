@@ -21,6 +21,7 @@ function copyMaterial(source, target){
 	target.gradientTexture = source.gradientTexture;
 	target.visibleNodesTexture = source.visibleNodesTexture;
 	target.classificationTexture = source.classificationTexture;
+	target.classificationTypeTexture = source.classificationTypeTexture;
 	target.matcapTexture = source.matcapTexture;
 
 	target.activeAttributeName = source.activeAttributeName;
