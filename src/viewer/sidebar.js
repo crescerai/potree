@@ -554,6 +554,7 @@ export class Sidebar{
 			let pointcloud = e.pointcloud;
 			let cloudIcon = `${Potree.resourcePath}/icons/cloud.svg`;
 			let node = createNode(pcID, pointcloud.name, cloudIcon, pointcloud);
+			tree.jstree().select_node(node);
 
 			pointcloud.addEventListener("visibility_changed", () => {
 				if(pointcloud.visible){
