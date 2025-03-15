@@ -22,6 +22,7 @@ import {ProfilePanel} from "./ProfilePanel.js";
 import {CameraPanel} from "./CameraPanel.js";
 import {AnnotationPanel} from "./AnnotationPanel.js";
 import { CameraAnimationPanel } from "./CameraAnimationPanel.js";
+import { ClassificationScheme } from "../../materials/ClassificationScheme.js";
 
 export class PropertiesPanel{
 
@@ -199,6 +200,12 @@ export class PropertiesPanel{
 					<select id="optMaterial" name="optMaterial"></select>
 				</li>
 
+				<div class="divider">
+					<span>Color Scheme</span>
+				</div>
+				<li>
+					<select id="colorScheme" name="colorScheme"></select>
+				</li>
 				<div id="materials.composite_weight_container">
 					<div class="divider">
 						<span>Attribute Weights</span>
@@ -494,6 +501,20 @@ export class PropertiesPanel{
 				let elOption = $(`<option>${option}</option>`);
 				attributeSelection.append(elOption);
 			}
+
+			const colorScheme = panel.find('#colorScheme');
+			for(let option of Object.keys(ClassificationScheme)){
+				let elOption = $(`<option>${option}</option>`);
+				colorScheme.append(elOption);
+			}
+			let updateColorScheme = (event, ui) => {
+				let selectedValue = colorScheme.selectmenu().val();
+				this.viewer.setClassifications(ClassificationScheme[selectedValue]);
+				material.classification = ClassificationScheme[selectedValue];
+				populateClassificationLikeAttribute();
+				material.resetClassificationTypeAttributeVisibility();
+			}
+			colorScheme.selectmenu({ change: updateColorScheme });
 
 			let updateMaterialPanel = (event, ui) => {
 				let selectedValue = attributeSelection.selectmenu().val();
